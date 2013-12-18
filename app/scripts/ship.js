@@ -1,27 +1,38 @@
 !(function(){
-  var width  = 300,
-      height = 300,
-      dt     = 1000/60;
+  var dt = Stage.dt;
 
-  function Ship(controls){
-    this.controls = controls;
+  function Ship(p, controls){
     this.sprite   = new Sprite();
+    
+    this.controls = controls;
+    
+    this.initialize();
+    Stage.add(this);
+  };
+  Ship.prototype.initialize = function(){
+    var start_position = P2(0,0);
 
-    this.bindControls();
-  }
-  Ship.prototype.bindControls = function(){
-    this.velocity = this.controls.map(setSpeed);
-    this.position = this.velocity.scan(P2(0,0), integrate);
+    this.velocity = this.controls.movement.map(scaleSpeed);
+    this.position = this.velocity.integrate(start_position);
 
-    this.position.onValue(this.sprite.move.bind(this.sprite));
-  }
+    this.position
+      .skipDuplicates(P2.equals)
+      .onValue(this.sprite.move.bind(this.sprite));
 
-  function setSpeed(v){
+    this.position
+      .sampledBy(this.controls.fire)
+      .onValue(this.fire.bind(this));
+  };
+  Ship.prototype.destroy = function(){
+    this.sprite.destroy();
+  };
+  Ship.prototype.fire = function(p){
+    new Bullet(p, V2(0, 1));
+  };
+
+  function scaleSpeed(v){
     var speed = 100;
-    return v.times(S(speed * dt/1000));
-  }
-  function integrate(p,v){
-    return p.offset(v);
+    return v.times(S(speed));
   };
 
   window.Ship = Ship;

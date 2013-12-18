@@ -23,11 +23,19 @@
     }, new Bacon.constant(V2.zero));
   };
 
+  function autofire(key){
+    return Input.keystate(key)
+      .sample(1)
+      .filter(function(x){ return x == 1; })
+      .debounceImmediate(300)
+  };
 
   window.Player1Controls = {
-    movement: directional_keys(KEYS['Up'], KEYS['Down'], KEYS['Left'], KEYS['Right'])
+    movement: directional_keys(KEYS['Up'], KEYS['Down'], KEYS['Left'], KEYS['Right']),
+    fire:     autofire(KEYS['0'])
   };
   window.Player2Controls = {
-    movement: directional_keys(KEYS['W'], KEYS['S'], KEYS['A'], KEYS['D'])
+    movement: directional_keys(KEYS['W'], KEYS['S'], KEYS['A'], KEYS['D']),
+    fire:     autofire(KEYS['1'])
   };
 })()

@@ -3,39 +3,41 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Space Duel</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <!-- build:css(.tmp) styles/main.css -->
-        <link rel="stylesheet" href="styles/main.css">
-        <!-- endbuild -->
-    </head>
-    <body>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Space Duel</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body>
 
-        <div id="canvas"></div>
+    <div id="canvas"></div>
 
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/bacon/dist/Bacon.js"></script>
+    <script src="bower_components/kineticjs/dist/kinetic-v4.7.3.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
 
-        <!-- build:js scripts/vendor.js -->
-        <!-- bower:js -->
-        <script src="bower_components/jquery/jquery.js"></script>
-        <script src="bower_components/bacon/dist/Bacon.js"></script>
-        <script src="bower_components/kineticjs/dist/kinetic-v4.7.3.js"></script>
-        <!-- endbower -->
-        <!-- endbuild -->
+    <!-- build:js scripts/main.js -->
+    <script src="scripts/core/vector.js"></script>
+    <script src="scripts/core/math.js"></script>
+    <script src="scripts/core/input.js"></script>
+    <script src="scripts/core/stage.js"></script>
+    <script src="scripts/core/sprite.js"></script>
 
-        <!-- build:js scripts/main.js -->
-        <script src="scripts/core/vector.js"></script>
-        <script src="scripts/core/input.js"></script>
+    <script src="scripts/controls.js"></script>
+    <script src="scripts/bullet.js"></script>
+    <script src="scripts/ship.js"></script>
 
-        <script src="scripts/controls.js"></script>
-        <script src="scripts/sprite.js"></script>
-        <script src="scripts/ship.js"></script>
-
-        <script src="scripts/main.js"></script>
-        <!-- endbuild -->
-</body>
+    <script src="scripts/main.js"></script>
+    <!-- endbuild -->
+  </body>
 </html>

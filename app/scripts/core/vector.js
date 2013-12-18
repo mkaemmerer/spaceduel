@@ -19,6 +19,13 @@
     this.x = x;
     this.y = y;
   };
+  Position2.origin = new Position2(0,0);
+  Position2.equals = function(p1, p2){
+    return p1.x == p2.x && p1.y == p2.y;
+  };
+  Position2.prototype.equals = function(p2){
+    return Position2.equals(this, p2);
+  };
   Position2.offset = function(p, v){
     return new Position2(p.x + v.dx, p.y + v.dy);
   };
@@ -34,6 +41,12 @@
     this.dy = dy;
   };
   Vector2.zero = new Vector2(0,0);
+  Vector2.equals = function(v1, v2){
+    return v1.dx == v2.dx && v1.dy == v2.dy;
+  };
+  Vector2.prototype.equals = function(v2){
+    return Vector2.equals(this, v2);
+  };
   Vector2.plus = function(v1,v2){
     return new Vector2(v1.dx + v2.dx, v1.dy + v2.dy);
   };
