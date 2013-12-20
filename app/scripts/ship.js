@@ -1,38 +1,34 @@
 !(function(){
-  var dt = Stage.dt;
-
-  function Ship(p, controls){
-    this.sprite   = new Sprite();
+  function Ship(stage, options){
+    this.stage  = stage;
+    this.sprite = new Sprite(this.stage, {width: 50, height: 50});
     
-    this.controls = controls;
-    
-    this.initialize();
-    Stage.add(this);
+    this.initialize(options);
+    this.stage.add(this.sprite);
   };
-  Ship.prototype.initialize = function(){
-    var start_position = P2(0,0);
+  Ship.prototype.initialize = function(options){
+    var controls = options.controls
+      , velocity = controls.movement.times(100)
+      , position = velocity.integrate(options.position);
+    
+    this.forward = options.forward;
 
-    this.velocity = this.controls.movement.map(scaleSpeed);
-    this.position = this.velocity.integrate(start_position);
-
-    this.position
+    position
       .skipDuplicates(P2.equals)
       .onValue(this.sprite.move.bind(this.sprite));
 
-    this.position
-      .sampledBy(this.controls.fire)
+    position
+      .sampledBy(controls.fire)
       .onValue(this.fire.bind(this));
   };
   Ship.prototype.destroy = function(){
     this.sprite.destroy();
   };
   Ship.prototype.fire = function(p){
-    new Bullet(p, V2(0, 1));
-  };
-
-  function scaleSpeed(v){
-    var speed = 100;
-    return v.times(S(speed));
+    new Bullet(this.stage, {
+      position: p,
+      velocity: this.forward
+    });
   };
 
   window.Ship = Ship;

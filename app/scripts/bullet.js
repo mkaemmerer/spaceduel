@@ -1,38 +1,32 @@
 !(function(){
-  var dt = Stage.dt;
-
-  function Bullet(p,v){
-    this.sprite   = new Sprite();
+  function Bullet(stage, options){
+    this.stage  = stage;
+    this.sprite = new Sprite(this.stage, {width: 5, height: 5});
     
-    this.velocity = Bacon.constant(v).map(scaleSpeed);
-    this.position = this.velocity.integrate(p);
-
-    this.initialize();
-    Stage.add(this);
+    this.initialize(options);
+    this.stage.add(this.sprite);
   };
-  Bullet.prototype.initialize = function(){
-    var out_of_bounds = function(p){
-      return p.x < 0 || p.y < 0 || p.x > Stage.width || p.y > Stage.height;
-    };
+  Bullet.prototype.initialize = function(options){
+    var stage    = this.stage;
+    var velocity = Bacon.constant(options.velocity).times(200)
+      , position = velocity.integrate(options.position);
 
-    this.position
+    position
       .skipDuplicates(P2.equals)
       .takeWhile(function(p){ return !out_of_bounds(p); })
       .onValue(this.sprite.move.bind(this.sprite));
 
-    this.position
+    position
       .filter(out_of_bounds)
       .take(1)
       .onValue(this.destroy.bind(this));
+    
+    function out_of_bounds(p){
+      return p.x < -50 || p.y < -50 || p.x > stage.width + 50 || p.y > stage.height + 50;
+    };
   };
   Bullet.prototype.destroy = function(){
     this.sprite.destroy();
-  };
-
-
-  function scaleSpeed(v){
-    var speed = 200;
-    return v.times(S(speed));
   };
 
   window.Bullet = Bullet;

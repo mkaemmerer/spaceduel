@@ -10,9 +10,9 @@
       height: this.height
     });
   };
-  Stage.prototype.add = function(object){
-    this.canvas.add(object.sprite.layer);
+  Stage.prototype.add = function(sprite){
+    this.canvas.add(sprite.layer);
   };
 
-  window.Stage = new Stage();
+  window.Stage = Stage;
 })();
