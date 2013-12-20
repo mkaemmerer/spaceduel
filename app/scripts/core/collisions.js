@@ -10,10 +10,10 @@
       var hits = collisions(object, other);
 
       var unsub_object = object.messages.plug(hits[0]);
-      other.destroyed.onValue(unsub_object);
+      other.destroyed.delay(1).onValue(unsub_object);
 
       var unsub_other  = other.messages.plug(hits[1]);
-      object.destroyed.onValue(unsub_other);
+      object.destroyed.delay(1).onValue(unsub_other);
     });
 
     object.destroyed.onValue(function(){ self.unregister(object); });
