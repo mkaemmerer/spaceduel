@@ -2,24 +2,34 @@
   function Bullet(stage, options){
     this.stage  = stage;
     this.sprite = new Sprite(this.stage, {width: 5, height: 5});
+    this.messages = new Bacon.Bus();
     
     this.initialize(options);
     this.stage.add(this.sprite);
   };
   Bullet.prototype.initialize = function(options){
     var stage    = this.stage;
-    var velocity = Bacon.constant(options.velocity).times(200)
+    var velocity = Bacon.constant(options.forward).times(200)
       , position = velocity.integrate(options.position);
 
-    position
-      .skipDuplicates(P2.equals)
-      .takeWhile(function(p){ return !out_of_bounds(p); })
-      .onValue(this.sprite.move.bind(this.sprite));
+    this.status = Bacon.combineTemplate({
+      position: position,
+      forward:  Bacon.constant(options.forward)
+    });
 
-    position
+    var destroyed = this.status
+      .map(".position")
       .filter(out_of_bounds)
       .take(1)
+
+    destroyed
       .onValue(this.destroy.bind(this));
+    
+    this.status
+      .map(".position")
+      .skipDuplicates(P2.equals)
+      .takeUntil(destroyed)
+      .onValue(this.sprite.move.bind(this.sprite));
     
     function out_of_bounds(p){
       return p.x < -50 || p.y < -50 || p.x > stage.width + 50 || p.y > stage.height + 50;
