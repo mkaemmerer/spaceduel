@@ -286,6 +286,11 @@ module.exports = function (grunt) {
     }
   });
 
+  grunt.registerTask('websocket_server', function(){
+    var websocket_server = require('./server/main');
+    websocket_server.start();
+  });
+
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
