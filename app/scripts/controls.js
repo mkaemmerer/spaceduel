@@ -1,4 +1,4 @@
-!(function(){  
+!(function(){
   function directional_keys(up, down, left, right){
     var moveUp    = Input.keystate(up).map(function(s){
       return S(s).times(V2(0,1));
@@ -12,15 +12,8 @@
     var moveRight = Input.keystate(right).map(function(s){
       return S(s).times(V2(1,0));
     });
-    
-    return sum([moveUp, moveDown, moveLeft, moveRight]);
-  }
-  function sum(vectors){
-    return vectors.reduce(function(v, memo){
-      return memo.combine(v, function(v1, v2){
-        return v1.plus(v2);
-      })
-    }, new Bacon.constant(V2.zero));
+
+    return Bacon.Math.sum([moveUp, moveDown, moveLeft, moveRight], V2.zero);
   };
 
   function autofire(key){
