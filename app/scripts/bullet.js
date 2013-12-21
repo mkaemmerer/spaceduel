@@ -5,29 +5,37 @@
     this.messages   = new Bacon.Bus();
 
     this.initialize(options);
+    this.bindEvents(options);
   };
   Bullet.prototype.initialize = function(options){
     var stage    = this.stage;
     var velocity = Bacon.constant(options.forward).times(200)
       , position = velocity.integrate(options.position);
 
-    this.status = Bacon.combineTemplate({
-      position: position,
-      forward:  Bacon.constant(options.forward)
-    });
-
-    this.destroyed = this.status
-      .map(".position")
+    var escaped = position
       .filter(out_of_bounds)
-      .take(1);
+      .toEventStream();
+    var hit     = this.messages
+      .filter(function(msg){ return msg.type == "hit"; });
+    this.destroyed = escaped.merge(hit).take(1);
+
+    this.status = Bacon.combineTemplate({
+        position: position,
+        forward:  Bacon.constant(options.forward)
+      })
+      .takeUntil(this.destroyed);
 
     function out_of_bounds(p){
       return p.x < -50 || p.y < -50 || p.x > stage.width + 50 || p.y > stage.height + 50;
     };
   };
+  Bullet.prototype.bindEvents = function(options){
+    var layer = options.team + "_bullets";
+    this.collisions.register(this, layer);
+    this.destroyed.onValue(this.destroy.bind(this));
+  };
   Bullet.prototype.destroy = function(){
     this.messages.end();
-    this.sprite.destroy();
   };
 
 
@@ -44,8 +52,8 @@
       .skipDuplicates(P2.equals)
       .onValue(this.sprite.move.bind(this.sprite));
 
-    bullet.destroyed
-      .onValue(this.destroy.bind(this));
+    bullet.status
+      .onEnd(this.destroy.bind(this));
   };
   BulletDisplay.prototype.destroy = function(){
     this.sprite.destroy();

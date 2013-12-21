@@ -5,9 +5,7 @@
     this.messages   = new Bacon.Bus();
 
     this.initialize(options);
-    this.bindEvents();
-
-    this.collisions.register(this);
+    this.bindEvents(options);
   };
   Ship.prototype.initialize = function(options){
     var controls = options.controls
@@ -27,17 +25,21 @@
 
     this.fire      = this.status
       .sampledBy(controls.fire)
-      .map(function(status){
-        return new Bullet(self.stage, self.collisions, {
-          position: status.position,
-          forward:  status.forward
-        });
-      })
+      .map(shoot)
       .takeUntil(this.destroyed);
+
+    function shoot(status){
+      return new Bullet(self.stage, self.collisions, {
+        position: status.position,
+        forward:  status.forward,
+        team:     options.team
+      });
+    };
   };
-  Ship.prototype.bindEvents = function(){
-    this.destroyed
-      .onValue(this.destroy.bind(this));
+  Ship.prototype.bindEvents = function(options){
+    var layer = options.team + "_ships";
+    this.collisions.register(this, layer);
+    this.destroyed.onValue(this.destroy.bind(this));
   };
   Ship.prototype.destroy = function(){
     this.messages.end();
@@ -64,8 +66,8 @@
         new BulletDisplay(bullet, self.stage);
       });
 
-    ship.destroyed
-      .onValue(this.destroy.bind(this));
+    ship.status
+      .onEnd(this.destroy.bind(this));
   };
   ShipDisplay.prototype.destroy = function(){
     this.sprite.destroy();
