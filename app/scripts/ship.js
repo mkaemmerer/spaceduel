@@ -29,7 +29,7 @@
       .takeUntil(this.destroyed);
 
     function shoot(status){
-      return new Bullet(self.stage, self.collisions, {
+      return new Laser(self.stage, self.collisions, {
         position: status.position,
         forward:  status.forward,
         team:     options.team
@@ -63,7 +63,7 @@
 
     ship.fire
       .onValue(function(bullet){
-        new BulletDisplay(bullet, self.stage);
+        new LaserDisplay(bullet, self.stage);
       });
 
     ship.status
