@@ -1,6 +1,6 @@
 !(function(){
-  function Laser(stage, collisions, options){
-    this.stage      = stage;
+  function Laser(world, collisions, options){
+    this.world      = world;
     this.collisions = collisions;
     this.messages   = new Bacon.Bus();
 
@@ -10,12 +10,12 @@
     this.bindEvents(options);
   };
   Laser.prototype.initialize = function(options){
-    var stage    = this.stage;
+    var world    = this.world;
     var velocity = Bacon.constant(options.forward).times(200)
       , position = velocity.integrate(options.position);
 
     var escaped = position
-      .filter(out_of_bounds)
+      .filter(world.outOfBounds.bind(world), 50)
       .toEventStream();
     var hit     = this.messages
       .filter(function(msg){ return msg.type == 'hit'; });
@@ -26,13 +26,9 @@
         forward:  Bacon.constant(options.forward)
       })
       .takeUntil(this.destroyed);
-
-    function out_of_bounds(p){
-      return p.x < -50 || p.y < -50 || p.x > stage.width + 50 || p.y > stage.height + 50;
-    };
   };
   Laser.prototype.bindEvents = function(options){
-    var layer = options.team + '_bullets';
+    var layer = options.team + '_lasers';
     this.collisions.register(this, layer);
     this.destroyed.onValue(this.destroy.bind(this));
   };
@@ -41,20 +37,20 @@
   };
 
 
-  function LaserDisplay(bullet, stage){
+  function LaserDisplay(laser, stage){
     this.stage  = stage;
     this.sprite = new Sprite(this.stage, {width: 5, height: 5});
     this.stage.add(this.sprite);
 
-    this.bindEvents(bullet);
+    this.bindEvents(laser);
   };
-  LaserDisplay.prototype.bindEvents = function(bullet){
-    bullet.status
+  LaserDisplay.prototype.bindEvents = function(laser){
+    laser.status
       .map('.position')
       .skipDuplicates(P2.equals)
       .onValue(this.sprite.move.bind(this.sprite));
 
-    bullet.status
+    laser.status
       .onEnd(this.destroy.bind(this));
   };
   LaserDisplay.prototype.destroy = function(){

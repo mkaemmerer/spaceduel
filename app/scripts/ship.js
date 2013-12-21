@@ -1,17 +1,19 @@
 !(function(){
-  function Ship(stage, collisions, options){
-    this.stage      = stage;
+  function Ship(world, collisions, options){
+    this.world      = world;
     this.collisions = collisions;
     this.messages   = new Bacon.Bus();
 
-    this.team = options.team;
+    this.team  = options.team;
+    this.size  = 50;
+    this.speed = 100;
 
     this.initialize(options);
     this.bindEvents(options);
   };
   Ship.prototype.initialize = function(options){
     var controls = options.controls
-      , velocity = controls.movement.times(100)
+      , velocity = controls.movement.times(this.speed)
       , position = velocity.integrate(options.position)
       , self     = this;
 
@@ -31,7 +33,7 @@
       .takeUntil(this.destroyed);
 
     function shoot(status){
-      return new Laser(self.stage, self.collisions, {
+      return new Laser(self.world, self.collisions, {
         position: status.position,
         forward:  status.forward,
         team:     options.team
@@ -53,8 +55,8 @@
 
     this.stage  = stage;
     this.sprite = new Sprite(this.stage, {
-      width:  50,
-      height: 50,
+      width:  ship.size,
+      height: ship.size,
       color:  color
     });
     this.stage.add(this.sprite);
@@ -70,8 +72,8 @@
       .onValue(this.sprite.move.bind(this.sprite));
 
     ship.fire
-      .onValue(function(bullet){
-        new LaserDisplay(bullet, self.stage);
+      .onValue(function(laser){
+        new LaserDisplay(laser, self.stage);
       });
 
     ship.status
