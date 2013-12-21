@@ -20,7 +20,7 @@
     return Input.keystate(key)
       .sample(1)
       .filter(function(x){ return x == 1; })
-      .debounceImmediate(300)
+      .debounceImmediate(300);
   };
 
   window.Player1Controls = {
@@ -31,4 +31,20 @@
     movement: directional_keys(KEYS['W'], KEYS['S'], KEYS['A'], KEYS['D']),
     fire:     autofire(KEYS['1'])
   };
-})()
+
+
+  var socket = ServerConnection();
+  window.ServerControls  = {
+    movement: Bacon.constant(V2.zero),
+    fire:     socket.asEventStream()
+                .filter(function(message){
+                  return message.type == "message";
+                })
+                .filter(function(message){
+                  return message.data == "fire";
+                })
+                .map(function(){
+                  return 1;
+                })
+  };
+})();

@@ -2,7 +2,8 @@
   "name": "space-duel",
   "version": "0.0.0",
   "dependencies": {
-    "ws": "~0.4.31"
+    "ws": "~0.4.31",
+    "baconjs": "~0.7.0-rc9"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

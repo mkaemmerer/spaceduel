@@ -1,4 +1,5 @@
 !(function(){
+  //Create global context objects
   var collisions = new Collisions({
     'red_lasers':  ['blue_ships'],
     'red_ships':   ['blue_lasers'],
@@ -16,6 +17,8 @@
   });
   var audio      = new AudioPlayer();
 
+
+  //Create Ships
   var ship1  = new Ship(world, collisions, {
     position: P2(200,  50),
     forward:  V2(  0,   1),
@@ -28,7 +31,7 @@
   var ship2  = new Ship(world, collisions, {
     position: P2(200, 350),
     forward:  V2(  0,  -1),
-    controls: Player2Controls,
+    controls: ServerControls,
     team:     'blue'
   });
   new ShipDisplay(ship2, stage);

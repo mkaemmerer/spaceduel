@@ -299,6 +299,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'concurrent:server',
+      'websocket_server',
       'autoprefixer',
       'connect:livereload',
       'watch'
