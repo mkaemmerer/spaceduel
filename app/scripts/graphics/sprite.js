@@ -13,7 +13,7 @@
       width:  options.width,
       height: options.height,
       offset: {x: options.width/2, y: options.height/2},
-      fill: 'crimson',
+      fill:   options.color || 'black',
       stroke: 'black',
       strokeWidth: 4
     });

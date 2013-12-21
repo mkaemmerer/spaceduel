@@ -61,10 +61,10 @@
 
   function collisions(object1, object2){
     var position1 = object1.status
-      .map(".position")
+      .map('.position')
       .skipDuplicates(P2.equals);
     var position2 = object2.status
-      .map(".position")
+      .map('.position')
       .skipDuplicates(P2.equals);
 
     var hits = Bacon.combineAsArray(position1, position2)
@@ -74,12 +74,12 @@
 
     var hits1 = hits
       .map(function(){
-        return { type: "hit", other: object2 };
+        return { type: 'hit', other: object2 };
       });
 
     var hits2 = hits
       .map(function(){
-        return { type: "hit", other: object1 };
+        return { type: 'hit', other: object1 };
       });
 
     return [hits1, hits2];
