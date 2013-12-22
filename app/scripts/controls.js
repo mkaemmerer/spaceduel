@@ -33,18 +33,19 @@
   };
 
 
+  function messageType(type){ return function(data){ return data.type == type; }; };
+
   var socket = ServerConnection();
   window.ServerControls  = {
-    movement: Bacon.constant(V2.zero),
+    movement: socket.receive
+                .filter(messageType('move'))
+                .map(function(data){
+                  var direction = data.direction;
+                  return V2(direction.dx, direction.dy);
+                })
+                .toProperty(V2.zero),
     fire:     socket.receive
-                .filter(function(message){
-                  return message.type == "message";
-                })
-                .filter(function(message){
-                  return message.data == "fire";
-                })
-                .map(function(){
-                  return 1;
-                })
+                .filter(messageType('fire'))
+                .map(function(){ return 1; })
   };
 })();

@@ -26,11 +26,14 @@ WebSocket.prototype.asEventStream = function(){
   });
 };
 function Connection(ws){
-  this.receive = ws.asEventStream();
+  this.receive = ws.asEventStream()
+    .filter(function(message){ return message.type == 'message'; })
+    .map('.data')
+    .map(JSON.parse);
   this.send    = new Bacon.Bus();
 
   this.receive.onEnd(this.send.end.bind(this.send));
-  this.send.onValue(ws.send.bind(ws));
+  this.send.map(JSON.stringify).onValue(ws.send.bind(ws));
 };
 
 
@@ -40,7 +43,11 @@ exports.start = function(){
 
   wss.on('connection', function(ws) {
     var connection = new Connection(ws);
-    var fire       = Bacon.interval(1000, "fire");
+    var fire       = Bacon.interval(1000, {type: 'fire'});
+    var move       = Bacon.repeatedly(1000, [
+        {type: 'move', direction: {dx: -1, dy: 0}},
+        {type: 'move', direction: {dx:  1, dy: 0}}
+      ]);
 
     connection.receive
       .onValue(function(message){
@@ -48,5 +55,6 @@ exports.start = function(){
       });
 
     connection.send.plug(fire);
+    connection.send.plug(move);
   });
 };

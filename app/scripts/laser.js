@@ -5,6 +5,7 @@
     this.messages   = new Bacon.Bus();
 
     this.team = options.team;
+    this.size = 0;
 
     this.initialize(options);
     this.bindEvents(options);
@@ -13,6 +14,8 @@
     var world    = this.world;
     var velocity = Bacon.constant(options.forward).times(200)
       , position = velocity.integrate(options.position);
+
+    this.created = Bacon.once(null);
 
     var escaped = position
       .filter(world.outOfBounds.bind(world), 50)
@@ -50,8 +53,7 @@
       .skipDuplicates(P2.equals)
       .onValue(this.sprite.move.bind(this.sprite));
 
-    laser.status
-      .onEnd(this.destroy.bind(this));
+    laser.destroyed.onValue(this.destroy.bind(this));
   };
   LaserDisplay.prototype.destroy = function(){
     this.sprite.destroy();

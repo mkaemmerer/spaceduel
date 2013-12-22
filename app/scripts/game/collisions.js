@@ -67,9 +67,11 @@
       .map('.position')
       .skipDuplicates(P2.equals);
 
+    var distance = (object1.size + object2.size)/2;
+
     var hits = Bacon.combineAsArray(position1, position2)
       .filter(function(ps){
-        return checkCollision(ps[0], ps[1]);
+        return checkCollision(distance, ps[0], ps[1]);
       });
 
     var hits1 = hits
@@ -84,9 +86,9 @@
 
     return [hits1, hits2];
   };
-  function checkCollision(p1, p2){
+  function checkCollision(distance, p1, p2){
     var between = V2.fromTo(p1,p2);
-    return between.magnitude() < 50;
+    return between.magnitude() < distance;
   };
 
   window.Collisions = Collisions;

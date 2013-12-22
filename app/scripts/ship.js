@@ -17,6 +17,8 @@
       , position = velocity.integrate(options.position)
       , self     = this;
 
+    this.created = Bacon.once(null);
+
     this.destroyed = this.messages
       .filter(function(msg){ return msg.type == 'hit'; })
       .take(1);
@@ -26,6 +28,10 @@
         forward:  Bacon.constant(options.forward)
       })
       .takeUntil(this.destroyed);
+
+    this.explode   = this.status
+      .sampledBy(this.destroyed)
+      .map(explode);
 
     this.fire      = this.status
       .sampledBy(controls.fire)
@@ -37,6 +43,11 @@
         position: status.position,
         forward:  status.forward,
         team:     options.team
+      });
+    };
+    function explode(status){
+      return new Explosion(self.world, self.collisions, {
+        position: status.position
       });
     };
   };
@@ -71,13 +82,15 @@
       .skipDuplicates(P2.equals)
       .onValue(this.sprite.move.bind(this.sprite));
 
-    ship.fire
-      .onValue(function(laser){
-        new LaserDisplay(laser, self.stage);
-      });
+    ship.fire.onValue(function(laser){
+      new LaserDisplay(laser, self.stage);
+    });
 
-    ship.status
-      .onEnd(this.destroy.bind(this));
+    ship.explode.onValue(function(explosion){
+      new ExplosionDisplay(explosion, self.stage);
+    });
+
+    ship.destroyed.onValue(this.destroy.bind(this));
   };
   ShipDisplay.prototype.destroy = function(){
     this.sprite.destroy();
@@ -91,15 +104,13 @@
   ShipAudio.prototype.bindEvents = function(ship){
     var self = this;
 
-    ship.status
-      .onEnd(function(){
-        self.audio.play('explode.mp3');
-      });
+    ship.explode.onValue(function(explosion){
+      new ExplosionAudio(explosion, self.audio);
+    });
 
-    ship.fire
-      .onValue(function(){
-        self.audio.play('laser.mp3');
-      });
+    ship.fire.onValue(function(){
+      self.audio.play('laser.mp3');
+    });
   };
 
   window.Ship        = Ship;

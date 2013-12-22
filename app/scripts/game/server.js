@@ -25,11 +25,14 @@
   function Connection(url){
     var ws = new WebSocket(url);
 
-    this.receive = ws.asEventStream();
+    this.receive = ws.asEventStream()
+      .filter(function(message){ return message.type == 'message'; })
+      .map('.data')
+      .map(JSON.parse);
     this.send    = new Bacon.Bus();
 
     this.receive.onEnd(this.send.end.bind(this.send));
-    this.send.onValue(ws.send.bind(ws));
+    this.send.map(JSON.stringify).onValue(ws.send.bind(ws));
   };
 
   window.ServerConnection = function(){
