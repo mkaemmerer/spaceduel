@@ -22,9 +22,19 @@
     });
   };
 
+  function Connection(url){
+    var ws = new WebSocket(url);
+
+    this.receive = ws.asEventStream();
+    this.send    = new Bacon.Bus();
+
+    this.receive.onEnd(this.send.end.bind(this.send));
+    this.send.onValue(ws.send.bind(ws));
+  };
+
   window.ServerConnection = function(){
     var host = window.document.location.host.replace(/:.*/, '');
-    var ws = new WebSocket('ws://' + host + ':8080');
-    return ws;
+    var url = 'ws://' + host + ':8080';
+    return new Connection(url);
   };
 })();

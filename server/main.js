@@ -25,30 +25,28 @@ WebSocket.prototype.asEventStream = function(){
     };
   });
 };
+function Connection(ws){
+  this.receive = ws.asEventStream();
+  this.send    = new Bacon.Bus();
+
+  this.receive.onEnd(this.send.end.bind(this.send));
+  this.send.onValue(ws.send.bind(ws));
+};
+
 
 
 exports.start = function(){
   wss = new WebSocketServer({port: 8080});
 
   wss.on('connection', function(ws) {
-    var stream = ws.asEventStream();
-    var closed = stream.withHandler(function(e){
-        if(e.isEnd())
-          return this.push(new Bacon.Next());
-      })
-      .take(1);
+    var connection = new Connection(ws);
+    var fire       = Bacon.interval(1000, "fire");
 
-    var fire = Bacon.interval(1000, "fire")
-      .takeUntil(closed);
+    connection.receive
+      .onValue(function(message){
+        console.log('received: %s', message);
+      });
 
-
-    //Side effects
-    stream.onValue(function(message) {
-      console.log('received: %s', message);
-    });
-
-    fire.onValue(function(value){
-      ws.send(value);
-    });
+    connection.send.plug(fire);
   });
 };

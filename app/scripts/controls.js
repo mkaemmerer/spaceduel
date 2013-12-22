@@ -36,7 +36,7 @@
   var socket = ServerConnection();
   window.ServerControls  = {
     movement: Bacon.constant(V2.zero),
-    fire:     socket.asEventStream()
+    fire:     socket.receive
                 .filter(function(message){
                   return message.type == "message";
                 })
