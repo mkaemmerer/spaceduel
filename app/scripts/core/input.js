@@ -35,7 +35,7 @@
   function keystate(code){
     var down = keydown(code).map(constant(1))
     var up   = keyup(code).map(constant(0))
-    return down.merge(up).toProperty(0);
+    return down.merge(up).toProperty(0).skipDuplicates();
   };
 
   window.KEYS  = KEYS;

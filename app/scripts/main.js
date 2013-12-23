@@ -1,5 +1,5 @@
 !(function(){
-  //Create global context objects
+  //Create global context objects:
   var collisions = new Collisions({
     'red_lasers':  ['blue_ships'],
     'red_ships':   ['blue_lasers'],
@@ -17,8 +17,22 @@
   });
   var audio      = new AudioPlayer();
 
+  //Connect to server:
+  var server     = ServerConnection();
+  window.setTimeout(function(){
+    server.send.plug(Player1Controls.movement
+      .map(function(value){
+        return {type: 'move', direction: value};
+      })
+    );
+    server.send.plug(Player1Controls.fire
+      .map(function(value){
+        return {type: 'fire'};
+      })
+    );
+  }, 500);
 
-  //Create Ships
+  //Create ships:
   var ship1  = new Ship(world, collisions, {
     position: P2(200,  50),
     forward:  V2(  0,   1),
@@ -31,7 +45,7 @@
   var ship2  = new Ship(world, collisions, {
     position: P2(200, 350),
     forward:  V2(  0,  -1),
-    controls: ServerControls,
+    controls: ServerControls(server),
     team:     'blue'
   });
   new ShipDisplay(ship2, stage);
