@@ -7,11 +7,9 @@
       .map(scale, dt/1000)
       .scan(start, add);
   };
-
   Bacon.Property.prototype.times = function(factor){
     return this.map(scale, factor);
   };
-
   Bacon.Property.prototype.plus  = function(property){
     return this.combine(property, add);
   };
@@ -24,11 +22,13 @@
   };
 
   //A polymorphic scale function
-  function scale(s,x){
+  function scale(x,y){
     if(x instanceof V2)
-      return scaleVector(S(s),x);
+      return scaleVector(S(x),y);
+    if(y instanceof V2)
+      return scaleVector(S(y),x);
     else
-      return scaleNumber(s,x);
+      return scaleNumber(x,y);
   };
   function scaleNumber(s,x){
     return x*s;

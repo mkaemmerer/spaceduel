@@ -59,6 +59,20 @@
     this.sprite.destroy();
   };
 
+
+  function LaserAudio(laser, audio){
+    this.audio = audio;
+    this.bindEvents(laser);
+  };
+  LaserAudio.prototype.bindEvents = function(laser){
+    var self = this;
+
+    laser.created.onValue(function(){
+      self.audio.play('laser.mp3');
+    });
+  };
+
   window.Laser        = Laser;
   window.LaserDisplay = LaserDisplay;
+  window.LaserAudio   = LaserAudio;
 })();

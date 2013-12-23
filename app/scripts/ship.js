@@ -108,8 +108,8 @@
       new ExplosionAudio(explosion, self.audio);
     });
 
-    ship.fire.onValue(function(){
-      self.audio.play('laser.mp3');
+    ship.fire.onValue(function(laser){
+      new LaserAudio(laser, self.audio);
     });
   };
 
