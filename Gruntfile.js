@@ -287,7 +287,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('websocket_server', function(){
-    var websocket_server = require('./server/main');
+    var websocket_server = require('./server/game_server');
     websocket_server.start();
   });
 
