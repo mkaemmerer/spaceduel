@@ -24,9 +24,9 @@
   //A polymorphic scale function
   function scale(x,y){
     if(x instanceof V2)
-      return scaleVector(S(x),y);
-    if(y instanceof V2)
       return scaleVector(S(y),x);
+    if(y instanceof V2)
+      return scaleVector(S(x),y);
     else
       return scaleNumber(x,y);
   };
