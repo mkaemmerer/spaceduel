@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "dependencies": {
     "ws": "~0.4.31",
-    "baconjs": "~0.7.0-rc9"
+    "baconjs": "~0.7.0-rc9",
+    "connect": "~2.12.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
