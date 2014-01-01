@@ -20,13 +20,19 @@ exports.start = function(){
 
   //Echo server:
   // connections
-  //   .onValue(function(ws){
-  //     var player = new Connection(ws);
+  //   .onValue(function(player){
   //     player.send.plug(player.receive.delay(500));
   //   });
 
 
-  function fakeInputs(){
+  //AI server:
+  // connections
+  //   .onValue(function(player){
+  //     player.send.plug(aiInputs());
+  //   });
+
+  //Stupid-simple AI player: fires and changes directions at regular intervals
+  function aiInputs(){
     var fire     = Bacon.interval(1000, {type: 'fire'});
     var movement = Bacon.repeatedly(2000, [
         {type: 'move', direction: {dx: -1, dy: 0}},

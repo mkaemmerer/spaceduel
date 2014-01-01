@@ -15,6 +15,10 @@
       .debounceImmediate(300);
   };
 
+  window.NoControls = {
+    movement: Bacon.constant(V2.zero),
+    fire:     Bacon.never()
+  };
   window.Keyboard1Controls = {
     movement: directional_keys(KEYS['Up'], KEYS['Down'], KEYS['Left'], KEYS['Right']),
     fire:     autofire(KEYS['0'])
