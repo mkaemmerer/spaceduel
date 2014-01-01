@@ -1,4 +1,6 @@
 !(function(){
+  'use strict';
+
   function Stage(options){
     this.width  = options.width;
     this.height = options.height;
@@ -9,7 +11,7 @@
       width:  this.width,
       height: this.height
     });
-  };
+  }
   Stage.prototype.add = function(sprite){
     this.canvas.add(sprite.layer);
   };

@@ -1,11 +1,14 @@
 !(function(){
+  'use strict';
+
   function Collisions(layer_info){
     this.layers = {};
 
     var self = this;
     for(var layer_name in layer_info){
-      if(layer_info.hasOwnProperty(layer_name))
+      if(layer_info.hasOwnProperty(layer_name)){
         this.layers[layer_name] = new CollisionLayer();
+      }
     }
     for(var name in this.layers){
       var layer = this.layers[name];
@@ -16,7 +19,7 @@
         other.collideWithLayer(layer);
       });
     }
-  };
+  }
   Collisions.prototype.register   = function(object, layer_name){
     this.layers[layer_name].register(object);
   };
@@ -25,13 +28,15 @@
   function CollisionLayer(){
     this.objects       = [];
     this.collides_with = [];
-  };
+  }
   CollisionLayer.prototype.collideWithLayer = function(layer){
     var contains = this.collides_with.reduce(function(memo, x){
       return memo || x === layer;
     }, false);
 
-    if(!contains) this.collides_with.push(layer);
+    if(!contains){
+      this.collides_with.push(layer);
+    }
   };
   CollisionLayer.prototype.register     = function(object){
     var other_objects = this.collides_with.reduce(function(memo, layer){
@@ -85,11 +90,11 @@
       });
 
     return [hits1, hits2];
-  };
+  }
   function checkCollision(distance, p1, p2){
     var between = V2.fromTo(p1,p2);
     return between.magnitude() < distance;
-  };
+  }
 
   window.Collisions = Collisions;
 })();

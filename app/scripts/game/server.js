@@ -1,4 +1,6 @@
 !(function(){
+  'use strict';
+
   WebSocket.prototype.asEventStream = function(){
     var ws = this;
 
@@ -26,14 +28,14 @@
     var ws = new WebSocket(url);
 
     this.receive = ws.asEventStream()
-      .filter(function(message){ return message.type == 'message'; })
+      .filter(function(message){ return message.type === 'message'; })
       .map('.data')
       .map(JSON.parse);
     this.send    = new Bacon.Bus();
 
     this.receive.onEnd(this.send.end.bind(this.send));
     this.send.map(JSON.stringify).onValue(ws.send.bind(ws));
-  };
+  }
 
   window.ServerConnection = function(){
     var host = window.document.location.host.replace(/:.*/, '');

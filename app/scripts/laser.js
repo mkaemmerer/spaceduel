@@ -1,4 +1,6 @@
 !(function(){
+  'use strict';
+
   function Laser(world, collisions, options){
     this.world      = world;
     this.collisions = collisions;
@@ -9,7 +11,7 @@
 
     this.initialize(options);
     this.bindEvents(options);
-  };
+  }
   Laser.prototype.initialize = function(options){
     var world    = this.world;
     var velocity = Bacon.constant(options.forward).times(200)
@@ -21,7 +23,7 @@
       .filter(world.outOfBounds.bind(world), 50)
       .toEventStream();
     var hit     = this.messages
-      .filter(function(msg){ return msg.type == 'hit'; });
+      .filter(function(msg){ return msg.type === 'hit'; });
     this.destroyed = escaped.merge(hit).take(1);
 
     this.status = Bacon.combineTemplate({
@@ -46,7 +48,7 @@
     this.stage.add(this.sprite);
 
     this.bindEvents(laser);
-  };
+  }
   LaserDisplay.prototype.bindEvents = function(laser){
     laser.status
       .map('.position')
@@ -63,7 +65,7 @@
   function LaserAudio(laser, audio){
     this.audio = audio;
     this.bindEvents(laser);
-  };
+  }
   LaserAudio.prototype.bindEvents = function(laser){
     var self = this;
 

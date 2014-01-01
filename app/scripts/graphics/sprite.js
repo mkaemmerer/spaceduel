@@ -1,11 +1,13 @@
 !(function(){
+  'use strict';
+
   function Sprite(stage, options){
     this.stage = stage;
     this.layer = new Kinetic.Layer();
 
     this.draw(options);
     this.stage.add(this);
-  };
+  }
   Sprite.prototype.draw = function(options){
     this.shape = new Kinetic.Rect({
       x: 0,

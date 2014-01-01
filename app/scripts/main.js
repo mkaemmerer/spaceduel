@@ -1,6 +1,8 @@
 !(function(){
+  'use strict';
+
   //Connect to server:
-  var server     = ServerConnection();
+  var server     = new ServerConnection();
   var start      = server.receive
     .filter(messageType('start'))
     .take(1);
@@ -8,8 +10,8 @@
   //Create new game instance
   start.onValue(function(message){
       var game    = new Game();
-      var display = new GameDisplay(game);
-      var audio   = new GameAudio(game);
+      new GameDisplay(game);
+      new GameAudio(game);
 
       if(message.player === 'red'){
         game.setRedControls(Keyboard1Controls);
@@ -22,18 +24,18 @@
     });
 
   //Broadcast control values to server
-  start.onValue(function(message){
+  start.onValue(function(){
       server.send.plug(Keyboard1Controls.movement
         .map(function(value){
           return {type: 'move', direction: value};
         })
       );
       server.send.plug(Keyboard1Controls.fire
-        .map(function(value){
+        .map(function(){
           return {type: 'fire'};
         })
       );
     });
 
-  function messageType(type){ return function(data){ return data.type == type; }; };
+  function messageType(type){ return function(data){ return data.type === type; }; }
 })();

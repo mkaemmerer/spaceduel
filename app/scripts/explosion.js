@@ -1,4 +1,6 @@
 !(function(){
+  'use strict';
+
   function Explosion(world, collisions, options){
     this.world      = world;
     this.collisions = collisions;
@@ -8,10 +10,10 @@
 
     this.initialize(options);
     this.bindEvents(options);
-  };
+  }
   Explosion.prototype.initialize = function(options){
     var position = Bacon.constant(options.position);
-    
+
     this.created   = Bacon.once(null);
     this.destroyed = Bacon.later(500, null);
 
@@ -34,7 +36,7 @@
     this.stage.add(this.sprite);
 
     this.bindEvents(explosion);
-  };
+  }
   ExplosionDisplay.prototype.bindEvents = function(explosion){
     explosion.status
       .map('.position')
@@ -51,7 +53,7 @@
   function ExplosionAudio(explosion, audio){
     this.audio = audio;
     this.bindEvents(explosion);
-  };
+  }
   ExplosionAudio.prototype.bindEvents = function(explosion){
     var self = this;
     explosion.created.onValue(function(){

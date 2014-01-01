@@ -1,4 +1,6 @@
 !(function(){
+  'use strict';
+
   function directional_keys(up, down, left, right){
     var moveUp    = Input.keystate(up).times(V2(0,1));
     var moveDown  = Input.keystate(down).times(V2(0,-1));
@@ -6,14 +8,14 @@
     var moveRight = Input.keystate(right).times(V2(1,0));
 
     return Bacon.Math.sum([moveUp, moveDown, moveLeft, moveRight], V2.zero);
-  };
+  }
 
   function autofire(key){
     return Input.keystate(key)
       .sample(1)
-      .filter(function(x){ return x == 1; })
+      .filter(function(x){ return x === 1; })
       .debounceImmediate(300);
-  };
+  }
 
   window.NoControls = {
     movement: Bacon.constant(V2.zero),
@@ -30,7 +32,7 @@
 
 
   window.ServerControls  = function(socket){
-    function messageType(type){ return function(data){ return data.type == type; }; };
+    function messageType(type){ return function(data){ return data.type === type; }; }
 
     return {
       movement: socket.receive

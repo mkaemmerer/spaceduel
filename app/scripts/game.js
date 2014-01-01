@@ -1,4 +1,6 @@
 !(function(){
+  'use strict';
+
   function Game(){
     //Create global context objects:
     this.collisions = new Collisions({
@@ -24,7 +26,7 @@
       forward:  V2(  0,  -1),
       team:     'blue'
     });
-  };
+  }
   Game.prototype.setRedControls = function(controls){
     this.red_ship.setControls(controls);
   };
@@ -32,7 +34,8 @@
     this.blue_ship.setControls(controls);
   };
 
-  function GameDisplay(game){    
+
+  function GameDisplay(game){
     this.stage      = new Stage({
       width:  400,
       height: 400
@@ -40,14 +43,15 @@
 
     new ShipDisplay(game.red_ship, this.stage);
     new ShipDisplay(game.blue_ship, this.stage);
-  };
+  }
+
 
   function GameAudio(game){
     this.audio      = new AudioPlayer();
 
     new ShipAudio(game.red_ship, this.audio);
     new ShipAudio(game.blue_ship, this.audio);
-  };
+  }
 
   window.Game        = Game;
   window.GameDisplay = GameDisplay;

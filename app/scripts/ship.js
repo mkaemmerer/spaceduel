@@ -1,4 +1,6 @@
 !(function(){
+  'use strict';
+
   function Ship(world, collisions, options){
     this.world      = world;
     this.collisions = collisions;
@@ -22,7 +24,7 @@
 
     this.initialize(options);
     this.bindEvents(options);
-  };
+  }
   Ship.prototype.initialize = function(options){
     var velocity = this.controls.movement.times(this.speed)
       , position = velocity.integrate(options.position)
@@ -31,7 +33,7 @@
     this.created = Bacon.once(null);
 
     this.destroyed = this.messages
-      .filter(function(msg){ return msg.type == 'hit'; })
+      .filter(function(msg){ return msg.type === 'hit'; })
       .take(1);
 
     this.status    = Bacon.combineTemplate({
@@ -57,12 +59,12 @@
         forward:  status.forward,
         team:     options.team
       });
-    };
+    }
     function explode(status){
       return new Explosion(self.world, self.collisions, {
         position: status.position
       });
-    };
+    }
   };
   Ship.prototype.bindEvents = function(options){
     var layer = options.team + '_ships';
@@ -89,7 +91,7 @@
     this.stage.add(this.sprite);
 
     this.bindEvents(ship);
-  };
+  }
   ShipDisplay.prototype.bindEvents = function(ship){
     var self = this;
 
@@ -116,7 +118,7 @@
   function ShipAudio(ship, audio){
     this.audio = audio;
     this.bindEvents(ship);
-  };
+  }
   ShipAudio.prototype.bindEvents = function(ship){
     var self = this;
 

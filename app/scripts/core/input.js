@@ -1,4 +1,6 @@
 !(function(){
+  'use strict';
+
   var KEYS = {
     'Backspace':8,
     'Tab':9,
@@ -22,21 +24,21 @@
     'Num Lock':144,'Scroll Lock':145,'My Computer':182,'My Calculator':183,
     ';':186,'=':187,',':188,'-':189,'.':190,'/':191,'`':192,'[':219,'\\':220,']':221,'\'':222};
 
-  function constant(x){ return function(_){ return x; }; };
+  function constant(x){ return function(_){ return x; }; }
 
   function keydown(code){
     return $('body').asEventStream('keydown')
-      .filter(function(evt){ return evt.keyCode == code; });
-  };
+      .filter(function(evt){ return evt.keyCode === code; });
+  }
   function keyup(code){
     return $('body').asEventStream('keyup')
-      .filter(function(evt){ return evt.keyCode == code; });
-  };
+      .filter(function(evt){ return evt.keyCode === code; });
+  }
   function keystate(code){
     var down = keydown(code).map(constant(1))
     var up   = keyup(code).map(constant(0))
     return down.merge(up).toProperty(0).skipDuplicates();
-  };
+  }
 
   window.KEYS  = KEYS;
   window.Input = {
