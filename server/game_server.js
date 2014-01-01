@@ -8,11 +8,14 @@ exports.start = function(){
   //Two player server:
   connections.bufferWithCount(2)
     .onValue(function(connections){
-      var player1 = connections[0];
-      var player2 = connections[1];
+      var red_player  = connections[0];
+      var blue_player = connections[1];
 
-      player1.send.plug(player2.receive);
-      player2.send.plug(player1.receive);
+      red_player.send.push({type: 'start', player: 'red'});
+      blue_player.send.push({type: 'start', player: 'blue'});
+
+      red_player.send.plug(blue_player.receive);
+      blue_player.send.plug(red_player.receive);
     });
 
   //Echo server:

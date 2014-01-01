@@ -15,11 +15,11 @@
       .debounceImmediate(300);
   };
 
-  window.Player1Controls = {
+  window.Keyboard1Controls = {
     movement: directional_keys(KEYS['Up'], KEYS['Down'], KEYS['Left'], KEYS['Right']),
     fire:     autofire(KEYS['0'])
   };
-  window.Player2Controls = {
+  window.Keyboard2Controls = {
     movement: directional_keys(KEYS['W'], KEYS['S'], KEYS['A'], KEYS['D']),
     fire:     autofire(KEYS['1'])
   };
