@@ -5,28 +5,16 @@
     this.world      = world;
     this.collisions = collisions;
     this.messages   = new Bacon.Bus();
-    this.changeControls = new Bacon.Bus();
 
     this.team  = options.team;
     this.size  = 50;
     this.speed = 100;
 
-    this.controls = {
-      movement: this.changeControls
-        .toProperty(NoControls)
-        .flatMapLatest(function(controls){ return controls.movement; })
-        .toProperty(V2.zero),
-
-      fire: this.changeControls
-        .toProperty(NoControls)
-        .flatMapLatest(function(controls){ return controls.fire; })
-    };
-
     this.initialize(options);
     this.bindEvents(options);
   }
   Ship.prototype.initialize = function(options){
-    var velocity = this.controls.movement.times(this.speed)
+    var velocity = options.controls.movement.times(this.speed)
       , position = velocity.integrate(options.position)
       , self     = this;
 
@@ -46,7 +34,7 @@
       .sampledBy(this.destroyed)
       .map(explode);
 
-    this.fire = this.controls.fire
+    this.fire = options.controls.fire
       .map(this.status)
       .map(shoot)
       .takeUntil(this.destroyed);
@@ -73,9 +61,6 @@
   };
   Ship.prototype.destroy = function(){
     this.messages.end();
-  };
-  Ship.prototype.setControls = function(controls){
-    this.changeControls.push(controls);
   };
 
 

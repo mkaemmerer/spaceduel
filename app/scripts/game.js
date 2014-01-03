@@ -15,23 +15,29 @@
       height: 400
     });
 
+    //Create controllers:
+    this.red_controls  = new Controller();
+    this.blue_controls = new Controller();
+
     //Create ships:
     this.red_ship   = new Ship(this.world, this.collisions, {
       position: P2(200,  50),
       forward:  V2(  0,   1),
+      controls: this.red_controls,
       team:     'red'
     });
     this.blue_ship  = new Ship(this.world, this.collisions, {
       position: P2(200, 350),
       forward:  V2(  0,  -1),
+      controls: this.blue_controls,
       team:     'blue'
     });
   }
   Game.prototype.setRedControls = function(controls){
-    this.red_ship.setControls(controls);
+    this.red_controls.setControls(controls);
   };
   Game.prototype.setBlueControls = function(controls){
-    this.blue_ship.setControls(controls);
+    this.blue_controls.setControls(controls);
   };
 
 

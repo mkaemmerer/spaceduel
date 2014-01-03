@@ -17,21 +17,27 @@
       .debounceImmediate(300);
   }
 
-  window.NoControls = {
-    movement: Bacon.constant(V2.zero),
-    fire:     Bacon.never()
-  };
-  window.Keyboard1Controls = {
-    movement: directional_keys(KEYS['Up'], KEYS['Down'], KEYS['Left'], KEYS['Right']),
-    fire:     autofire(KEYS['0'])
-  };
-  window.Keyboard2Controls = {
-    movement: directional_keys(KEYS['W'], KEYS['S'], KEYS['A'], KEYS['D']),
-    fire:     autofire(KEYS['1'])
-  };
 
-
-  window.ServerControls  = function(socket){
+  var Controls = {};
+  Controls.NoControls = function(){
+    return {
+      movement: Bacon.constant(V2.zero),
+      fire:     Bacon.never()
+    };
+  };
+  Controls.Keyboard1Controls = function(){
+    return {
+      movement: directional_keys(KEYS['Up'], KEYS['Down'], KEYS['Left'], KEYS['Right']),
+      fire:     autofire(KEYS['0'])
+    };
+  };
+  Controls.Keyboard2Controls = function(){
+    return {
+      movement: directional_keys(KEYS['W'], KEYS['S'], KEYS['A'], KEYS['D']),
+      fire:     autofire(KEYS['1'])
+    };
+  };
+  Controls.ServerControls  = function(socket){
     function messageType(type){ return function(data){ return data.type === type; }; }
 
     return {
@@ -47,4 +53,24 @@
                   .map(function(){ return 1; })
     };
   };
+
+
+  function Controller(){
+    this.change   = new Bacon.Bus();
+
+    this.movement = this.change
+        .toProperty(Controls.NoControls())
+        .flatMapLatest(function(controls){ return controls.movement; })
+        .toProperty(V2.zero);
+
+    this.fire     = this.change
+        .toProperty(Controls.NoControls())
+        .flatMapLatest(function(controls){ return controls.fire; });
+  }
+  Controller.prototype.setControls = function(controls){
+    this.change.push(controls);
+  };
+
+  window.Controls   = Controls;
+  window.Controller = Controller;
 })();

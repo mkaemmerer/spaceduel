@@ -14,23 +14,23 @@
       new GameAudio(game);
 
       if(message.player === 'red'){
-        game.setRedControls(Keyboard1Controls);
-        game.setBlueControls(ServerControls(server));
+        game.setRedControls(Controls.Keyboard1Controls());
+        game.setBlueControls(Controls.ServerControls(server));
       }
       if(message.player === 'blue'){
-        game.setRedControls(ServerControls(server));
-        game.setBlueControls(Keyboard1Controls);
+        game.setRedControls(Controls.ServerControls(server));
+        game.setBlueControls(Controls.Keyboard1Controls());
       }
     });
 
   //Broadcast control values to server
   start.onValue(function(){
-      server.send.plug(Keyboard1Controls.movement
+      server.send.plug(Controls.Keyboard1Controls().movement
         .map(function(value){
           return {type: 'move', direction: value};
         })
       );
-      server.send.plug(Keyboard1Controls.fire
+      server.send.plug(Controls.Keyboard1Controls().fire
         .map(function(){
           return {type: 'fire'};
         })
