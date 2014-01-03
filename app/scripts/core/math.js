@@ -1,4 +1,4 @@
-!(function(){
+(function(){
   'use strict';
 
   var dt = 1000/60;

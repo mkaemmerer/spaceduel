@@ -1,4 +1,4 @@
-!(function(){
+(function(){
   'use strict';
 
   function directional_keys(up, down, left, right){

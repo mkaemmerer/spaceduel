@@ -1,4 +1,4 @@
-!(function(){
+(function(){
   'use strict';
 
   function Laser(world, collisions, options){
