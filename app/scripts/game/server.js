@@ -1,6 +1,10 @@
 (function(){
   'use strict';
 
+  //Imports:
+  var Bacon  = require('baconjs');
+
+
   WebSocket.prototype.asEventStream = function(){
     var ws = this;
 
@@ -37,6 +41,8 @@
     this.send.map(JSON.stringify).onValue(ws.send.bind(ws));
   }
 
+
+  //Exports:
   window.ServerConnection = function(){
     var host = window.document.location.host.replace(/:.*/, '');
     var url = 'ws://' + host + ':8080';

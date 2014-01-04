@@ -28,6 +28,10 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
         tasks: ['copy:styles', 'autoprefixer']
       },
+      scripts: {
+        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+        tasks: ['browserify:develop']
+      },
       livereload: {
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -35,9 +39,33 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.app %>/*.html',
           '.tmp/styles/{,*/}*.css',
-          '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
+          '.tmp/scripts/{,*/}*.js',
           '<%= yeoman.app %>/images/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
         ]
+      }
+    },
+    browserify: {
+      develop: {
+        files: {
+          '.tmp/scripts/main.js': '<%= yeoman.app %>/scripts/main.js',
+          '.tmp/scripts/vendor.js': [
+            '<%= yeoman.app %>/bower_components/jquery/jquery.js',
+            '<%= yeoman.app %>/bower_components/bacon/dist/Bacon.js'
+          ]
+        },
+        options: {
+          debug: true,
+          external: ['baconjs', 'jquery'],
+          alias:    ['<%= yeoman.app %>/bower_components/bacon/dist/Bacon.js:baconjs']
+        }
+      },
+      dist: {
+        files: {
+          '.tmp/scripts/main.js': '<%= yeoman.app %>/scripts/main.js'
+        },
+        options: {
+          external: ['baconjs', 'jquery']
+        }
       }
     },
     connect: {
@@ -271,6 +299,7 @@ module.exports = function (grunt) {
     concurrent: {
       server: [
         'compass',
+        'browserify:develop',
         'copy:styles'
       ],
       test: [
@@ -278,6 +307,7 @@ module.exports = function (grunt) {
       ],
       dist: [
         'compass',
+        'browserify:dist',
         'copy:styles',
         'imagemin',
         'svgmin',

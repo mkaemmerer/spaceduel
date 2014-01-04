@@ -1,4 +1,5 @@
 var Server = require('./sockets').Server;
+var Game   = require('../app/scripts/game');
 
 
 exports.start = function(){

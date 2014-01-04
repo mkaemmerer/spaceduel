@@ -1,6 +1,13 @@
 (function(){
   'use strict';
 
+  //Imports:
+  var Bacon  = require('baconjs')
+    , Vector = require('../core/vector')
+    , V2     = Vector.V2
+    , P2     = Vector.P2;
+
+
   function Collisions(layer_info){
     this.layers = {};
 
@@ -96,5 +103,12 @@
     return between.magnitude() < distance;
   }
 
-  window.Collisions = Collisions;
+
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = Collisions;
+    module.exports.Collisions = Collisions;
+  } else {
+    window.Collisions = Collisions;
+  }
 })();

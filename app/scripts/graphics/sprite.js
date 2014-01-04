@@ -29,5 +29,12 @@
     this.layer.destroy();
   };
 
-  window.Sprite = Sprite;
+
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = Sprite;
+    module.exports.Sprite = Sprite;
+  } else {
+    window.Sprite = Sprite;
+  }
 })();

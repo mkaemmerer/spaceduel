@@ -1,6 +1,12 @@
 (function(){
   'use strict';
 
+  //Imports:
+  var Bacon  = require('baconjs')
+    , P2     = require('./core/vector').P2
+    , Sprite = require('./graphics/sprite').Sprite;
+
+
   function Laser(world, collisions, options){
     this.world      = world;
     this.collisions = collisions;
@@ -74,7 +80,16 @@
     });
   };
 
-  window.Laser        = Laser;
-  window.LaserDisplay = LaserDisplay;
-  window.LaserAudio   = LaserAudio;
+
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = Laser;
+    module.exports.Laser        = Laser;
+    module.exports.LaserDisplay = LaserDisplay;
+    module.exports.LaserAudio   = LaserAudio;
+  } else {
+    window.Laser        = Laser;
+    window.LaserDisplay = LaserDisplay;
+    window.LaserAudio   = LaserAudio;
+  }
 })();

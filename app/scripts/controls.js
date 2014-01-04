@@ -1,6 +1,13 @@
 (function(){
   'use strict';
 
+  //Imports:
+  var Bacon  = require('baconjs')
+    , Input  = require('./core/input')
+    , KEYS   = Input.KEYS
+    , V2     = require('./core/vector').V2;
+
+
   function directional_keys(up, down, left, right){
     var moveUp    = Input.keystate(up).times(V2(0,1));
     var moveDown  = Input.keystate(down).times(V2(0,-1));
@@ -71,6 +78,14 @@
     this.change.push(controls);
   };
 
-  window.Controls   = Controls;
-  window.Controller = Controller;
+
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = Controls;
+    module.exports.Controls   = Controls;
+    module.exports.Controller = Controller;
+  } else {
+    window.Controls   = Controls;
+    window.Controller = Controller;
+  }
 })();

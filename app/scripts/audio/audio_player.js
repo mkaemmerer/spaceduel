@@ -10,5 +10,12 @@
     return sound;
   };
 
-  window.AudioPlayer = AudioPlayer;
+
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = AudioPlayer;
+    module.exports.AudioPlayer = AudioPlayer;
+  } else {
+    window.AudioPlayer         = AudioPlayer;
+  }
 })();

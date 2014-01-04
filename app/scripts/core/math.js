@@ -1,8 +1,15 @@
 (function(){
   'use strict';
 
-  var dt = 1000/60;
+  //Imports:
+  var Bacon  = require('baconjs')
+    , Vector = require('./vector')
+    , S      = Vector.S
+    , V2     = Vector.V2
+    , P2     = Vector.P2;
 
+
+  var dt = 1000/60;
 
   Bacon.Property.prototype.integrate = function(start){
     return this.sample(dt)

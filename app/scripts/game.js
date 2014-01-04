@@ -1,6 +1,23 @@
 (function(){
   'use strict';
 
+  //Imports:
+  var Bacon  = require('baconjs')
+    , Vector = require('./core/vector')
+    , S      = Vector.S
+    , V2     = Vector.V2
+    , P2     = Vector.P2
+    , Collisions  = require('./game/collisions')
+    , World       = require('./game/world')
+    , Stage       = require('./graphics/stage')
+    , AudioPlayer = require('./audio/audio_player')
+    , Controls    = require('./controls')
+    , Controller  = Controls.Controller
+    , Ship        = require('./ship')
+    , ShipAudio   = Ship.ShipAudio
+    , ShipDisplay = Ship.ShipDisplay;
+
+
   function Game(){
     //Create global context objects:
     this.collisions = new Collisions({
@@ -59,7 +76,16 @@
     new ShipAudio(game.blue_ship, this.audio);
   }
 
-  window.Game        = Game;
-  window.GameDisplay = GameDisplay;
-  window.GameAudio   = GameAudio;
+
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = Game;
+    module.exports.Game        = Game;
+    module.exports.GameDisplay = GameDisplay;
+    module.exports.GameAudio   = GameAudio;
+  } else {
+    window.Game        = Game;
+    window.GameDisplay = GameDisplay;
+    window.GameAudio   = GameAudio;
+  }
 })();

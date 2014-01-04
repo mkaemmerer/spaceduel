@@ -59,7 +59,15 @@
   Vector2.prototype.magnitude = function(){   return Vector2.magnitude(this);  };
 
 
-  window.S  = window.Scalar    = Scalar;
-  window.P2 = window.Position2 = Position2;
-  window.V2 = window.Vector2   = Vector2;
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports    = {};
+    module.exports.S  = module.exports.Scalar    = Scalar;
+    module.exports.P2 = module.exports.Position2 = Position2;
+    module.exports.V2 = module.exports.Vector2   = Vector2;
+  } else {
+    window.S  = window.Scalar    = Scalar;
+    window.P2 = window.Position2 = Position2;
+    window.V2 = window.Vector2   = Vector2;
+  }
 })();

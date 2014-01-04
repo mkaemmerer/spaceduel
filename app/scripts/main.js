@@ -1,6 +1,12 @@
 (function(){
   'use strict';
 
+  var Game        = require('./game')
+    , GameDisplay = Game.GameDisplay
+    , GameAudio   = Game.GameAudio
+    , Controls    = require('./controls');
+  require('./game/server');
+
   //Connect to server:
   var server     = new ServerConnection();
   var start      = server.receive

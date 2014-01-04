@@ -1,6 +1,19 @@
 (function(){
   'use strict';
 
+  //Imports:
+  var Bacon  = require('baconjs')
+    , P2     = require('./core/vector').P2
+    , __     = require('./core/math')
+    , Sprite = require('./graphics/sprite').Sprite
+    , Laser        = require('./laser')
+    , LaserAudio   = Laser.LaserAudio
+    , LaserDisplay = Laser.LaserDisplay
+    , Explosion        = require('./explosion')
+    , ExplosionDisplay = Explosion.ExplosionDisplay
+    , ExplosionAudio   = Explosion.ExplosionAudio;
+
+
   function Ship(world, collisions, options){
     this.world      = world;
     this.collisions = collisions;
@@ -116,7 +129,16 @@
     });
   };
 
-  window.Ship        = Ship;
-  window.ShipDisplay = ShipDisplay;
-  window.ShipAudio   = ShipAudio;
+
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = Ship;
+    module.exports.Ship        = Ship;
+    module.exports.ShipDisplay = ShipDisplay;
+    module.exports.ShipAudio   = ShipAudio;
+  } else {
+    window.Ship        = Ship;
+    window.ShipDisplay = ShipDisplay;
+    window.ShipAudio   = ShipAudio;
+  }
 })();

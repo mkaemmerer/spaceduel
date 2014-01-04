@@ -16,5 +16,12 @@
     this.canvas.add(sprite.layer);
   };
 
-  window.Stage = Stage;
+
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = Stage;
+    module.exports.Stage = Stage;
+  } else {
+    window.Stage         = Stage;
+  }
 })();

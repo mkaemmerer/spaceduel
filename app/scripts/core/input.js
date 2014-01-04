@@ -1,6 +1,10 @@
 (function(){
   'use strict';
 
+  //Imports:
+  var Bacon  = require('baconjs');
+
+
   var KEYS = {
     'Backspace':8,
     'Tab':9,
@@ -40,10 +44,19 @@
     return down.merge(up).toProperty(0).skipDuplicates();
   }
 
-  window.KEYS  = KEYS;
-  window.Input = {
+  var Input = {
     keydown:   keydown,
     keyup:     keyup,
     keystate:  keystate,
   };
+
+  //Exports:
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = Input;
+    module.exports.Input   = Input;
+    module.exports.KEYS    = KEYS;
+  } else {
+    window.Input = Input;
+    window.KEYS  = KEYS;
+  }
 })();
